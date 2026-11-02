@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<!-- Barra superior que se reutiliza en todas las paginas con sesion iniciada -->
+<header th:fragment="barra" class="barra">
+    <a th:href="@{/}" class="marca">Gestor de productos</a>
+    <div class="sesion">
+        <span>
+            Usuario: <strong sec:authentication="name">nombre</strong>
+            &middot; Roles: <strong sec:authentication="principal.authorities">[ROL]</strong>
+        </span>
+        <!-- Logout por POST: th:action agrega solo el token CSRF -->
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="boton boton-secundario">Cerrar sesi&oacute;n</button>
+        </form>
+    </div>
+</header>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Productos</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments :: barra}"></header>
+
+<main class="contenido">
+    <div class="titulo-seccion">
+        <h1>Productos</h1>
+        <!-- El boton solo se pinta si el usuario tiene el rol.
+             Aunque escriba /new a mano, la configuracion lo bloquea con 403. -->
+        <a sec:authorize="hasAnyAuthority('ADMIN', 'CREATOR')"
+           th:href="@{/new}" class="boton">+ Nuevo producto</a>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Marca</th>
+            <th>Pa&iacute;s de origen</th>
+            <th class="numero">Precio</th>
+            <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${productos}">
+            <td th:text="${p.id}">1</td>
+            <td th:text="${p.nombre}">Nombre</td>
+            <td th:text="${p.marca}">Marca</td>
+            <td th:text="${p.paisOrigen}">Pais</td>
+            <td class="numero" th:text="${'$ ' + #numbers.formatDecimal(p.precio, 1, 'POINT', 2, 'COMMA')}">$ 0,00</td>
+            <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')" class="acciones">
+                <a th:href="@{/edit/{id}(id=${p.id})}" class="boton boton-secundario">Editar</a>
+                <form sec:authorize="hasAuthority('ADMIN')"
+                      th:action="@{/delete/{id}(id=${p.id})}" method="post"
+                      onsubmit="return confirm('¿Eliminar este producto?');">
+                    <button type="submit" class="boton boton-peligro">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(productos)}">
+            <td colspan="6" class="sutil">No hay productos registrados.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+</body>
+</html>

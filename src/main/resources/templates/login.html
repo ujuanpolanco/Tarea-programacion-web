@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Iniciar sesi&oacute;n</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="centrado">
+
+<main class="tarjeta tarjeta-login">
+    <h1>Iniciar sesi&oacute;n</h1>
+    <p class="sutil">Gestor de productos &middot; acceso por roles</p>
+
+    <!-- Mensajes segun el parametro que deja Spring Security en la URL -->
+    <div th:if="${param.error}" class="alerta alerta-error">
+        Usuario o contrase&ntilde;a incorrectos.
+    </div>
+    <div th:if="${param.deshabilitado}" class="alerta alerta-error">
+        Tu cuenta est&aacute; deshabilitada. Contacta al administrador.
+    </div>
+    <div th:if="${param.logout}" class="alerta alerta-ok">
+        Cerraste sesi&oacute;n correctamente.
+    </div>
+
+    <!-- Spring Security espera los campos "username" y "password" por POST en /login -->
+    <form th:action="@{/login}" method="post">
+        <label for="username">Usuario</label>
+        <input type="text" id="username" name="username" required autofocus>
+
+        <label for="password">Contrase&ntilde;a</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit" class="boton boton-ancho">Ingresar</button>
+    </form>
+</main>
+
+</body>
+</html>
